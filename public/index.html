@@ -13,11 +13,15 @@
 		height: 50px;
 		width: 170px;
 	}
-	.enemycard {
-		height: 300px;
-		width: 200px;
+	.card {
+		height: 200px;
+		width: 130px;
 		border: 1px solid black;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
 	}
+
 	</style>
 </head>
 <body>
@@ -25,36 +29,63 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-lg-4 col-lg-offset-5">
-				<div class="text-center start">Start</div>
+				<a href="#gametop"><div class="text-center start">Start</div></a>
 			</div>
 		</div>
 	</div>
-	<div class="row enemyhand">
+	<div class="row enemyhand text-center">
+		<h3 id="gametop">Opponent's Hand</h3>
 		<div class="col-lg-12 col-lg-offset-1">
 			<div class="col-lg-2">
-				<div class="enemycard" id="card1"></div>
+				<div class="card" id="enemycard1"></div>
 			</div>
 			<div class="col-lg-2">
-				<div class="enemycard" id="card2"></div>
+				<div class="card" id="enemycard2"></div>
 			</div>
 			<div class="col-lg-2">
-				<div class="enemycard" id="card3"></div>
+				<div class="card" id="enemycard3"></div>
 			</div>
 			<div class="col-lg-2">
-				<div class="enemycard" id="card4"></div>
+				<div class="card" id="enemycard4"></div>
 			</div>
 			<div class="col-lg-2">
-				<div class="enemycard" id="card5"></div>
+				<div class="card" id="enemycard5"></div>
 			</div>
 		</div>
+	</div>
+	<div class="row enemyhand text-center">
+		<h3>Your Hand</h3>
+		<div class="col-lg-12 col-lg-offset-1">
+			<div class="col-lg-2">
+				<div class="card" id="yourcard1"></div>
+			</div>
+			<div class="col-lg-2">
+				<div class="card" id="yourcard2"></div>
+			</div>
+			<div class="col-lg-2">
+				<div class="card" id="yourcard3"></div>
+			</div>
+			<div class="col-lg-2">
+				<div class="card" id="yourcard4"></div>
+			</div>
+			<div class="col-lg-2">
+				<div class="card" id="yourcard5"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<br><br><br>
 	</div>
 <script src="/js/jquery.js"></script>
 <script>
 var deck = ["Ace", "Ace", "Ace", "Ace", "2", "2", "2", "2", "3", "3", "3", "3", "4", "4", "4", "4", "5", "5", "5", "5", "6", "6", "6", "6", "7", "7", "7", "7", "8", "8", "8", "8", "9", "9", "9", "9", "10", "10", "10", "10", "Jack", "Jack", "Jack", "Jack", "Queen", "Queen", "Queen", "Queen", "King", "King", "King", "King"];
+var deckimages = ["aceofhearts.png", "aceofdiamonds.png", "aceofspades.png", "aceofclubs.png", "2ofhearts.png", "2ofdiamonds.png", "2ofspades.png", "2ofclubs.png", "3ofhearts.png", "3ofdiamonds.png", "3ofspades.png", "3ofclubs.png","4ofhearts.png", "4ofdiamonds.png", "4ofspades.png", "4ofclubs.png", "5ofhearts.png", "5ofdiamonds.png", "5ofspades.png", "5ofclubs.png", "6ofhearts.png", "6ofdiamonds.png", "6ofspades.png", "6ofclubs.png", "7ofhearts.png", "7ofdiamonds.png", "7ofspades.png", "7ofclubs.png", "8ofhearts.png", "8ofdiamonds.png", "8ofspades.png", "8ofclubs.png", "9ofhearts.png", "9ofdiamonds.png", "9ofspades.png", "9ofclubs.png", "10ofhearts.png", "10ofdiamonds.png", "10ofspades.png", "10ofclubs.png", "jackofhearts.png", "jackofdiamonds.png", "jackofspades.png", "jackofclubs.png", "queenofhearts.png", "queenofdiamonds.png", "queenofspades.png", "queenofclubs.png", "kingofhearts.png", "kingofdiamonds.png", "kingofspades.png", "kingofclubs.png"];
 var hand = [];
 var pairs = [];
+var handimages = [];
 var ophand = [];
 var oppairs = [];
+var ophandimages = [];
 
 var cut = function() {
 	var random = Math.floor(Math.random(0, 1) * (deck.length-1));
@@ -70,6 +101,8 @@ var cut = function() {
 	} else {
 		hand.push(deck[random]);
 	}
+	handimages.push(deckimages[random]);
+	deckimages.splice(random, 1);
 	deck.splice(random, 1);
 
 	if(deck[oprandom] == "Jack") {
@@ -83,11 +116,15 @@ var cut = function() {
 	} else {
 		ophand.push(deck[oprandom]);
 	}
+	ophandimages.push(deckimages[oprandom]);
+	deckimages.splice(oprandom, 1);
 	deck.splice(oprandom, 1);
 }
 $(".start").click(function() {
 	for(var card = 0; card < 5; card++) {
 		cut();
+		$("#enemycard" + (card + 1)).css("background-image", "url(img/back.png)").css("");
+		$("#yourcard" + (card + 1)).css("background-image", "url(img/" + handimages[card] + ")");
 	}
 	hand.sort(function(a, b){return a-b});
 	ophand.sort(function(a, b){return a-b});
