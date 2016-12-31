@@ -21,7 +21,11 @@
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 	}
-
+	.dropbtn {
+		height: 30px;
+		width: 170px;
+		border: 1px solid black;
+	}
 	</style>
 </head>
 <body>
@@ -53,7 +57,25 @@
 			</div>
 		</div>
 	</div>
-	<div class="row enemyhand text-center">
+	<br>
+	<div class="text-center">
+		Enemy Pairs:<br>
+		<div class="enemypairs">0</div>
+	</div>
+	<br><br><br>
+	<div class="deckremaining text-center">
+		Cards Remaining:<br>
+		<div class="numberofcards">52</div>
+	</div>
+	<br><br>
+	<div class="dialogue text-center">
+
+	</div>
+	<div class="text-center">
+		Your Pairs:<br>
+		<div class="yourpairs">0</div>
+	</div>
+	<div class="row yourhand text-center">
 		<h3>Your Hand</h3>
 		<div class="col-lg-12 col-lg-offset-1">
 			<div class="col-lg-2">
@@ -73,65 +95,288 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<br><br><br>
+	<div class="row text-center">
+		<div class="yourextra2 col-lg-12 col-lg-offset-1">
+		</div>
 	</div>
+	<div class="row text-center">
+		<div class="yourextra3 col-lg-12 col-lg-offset-1">
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="yourextra4 col-lg-12 col-lg-offset-1">
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="yourextra5 col-lg-12 col-lg-offset-1">
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="yourextra6 col-lg-12 col-lg-offset-1">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="col-lg-3 col-lg-offset-5">
+				<div class="dropdown">
+		  			<button class="dropbtn">Got any...</button>
+		  			<div id="possiblecards" class="dropdown-content">
+		  				<select id="answers">
+
+		  				</select>
+		  			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br><br><br><br><br>
 <script src="/js/jquery.js"></script>
 <script>
-var deck = ["Ace", "Ace", "Ace", "Ace", "2", "2", "2", "2", "3", "3", "3", "3", "4", "4", "4", "4", "5", "5", "5", "5", "6", "6", "6", "6", "7", "7", "7", "7", "8", "8", "8", "8", "9", "9", "9", "9", "10", "10", "10", "10", "Jack", "Jack", "Jack", "Jack", "Queen", "Queen", "Queen", "Queen", "King", "King", "King", "King"];
-var deckimages = ["aceofhearts.png", "aceofdiamonds.png", "aceofspades.png", "aceofclubs.png", "2ofhearts.png", "2ofdiamonds.png", "2ofspades.png", "2ofclubs.png", "3ofhearts.png", "3ofdiamonds.png", "3ofspades.png", "3ofclubs.png","4ofhearts.png", "4ofdiamonds.png", "4ofspades.png", "4ofclubs.png", "5ofhearts.png", "5ofdiamonds.png", "5ofspades.png", "5ofclubs.png", "6ofhearts.png", "6ofdiamonds.png", "6ofspades.png", "6ofclubs.png", "7ofhearts.png", "7ofdiamonds.png", "7ofspades.png", "7ofclubs.png", "8ofhearts.png", "8ofdiamonds.png", "8ofspades.png", "8ofclubs.png", "9ofhearts.png", "9ofdiamonds.png", "9ofspades.png", "9ofclubs.png", "10ofhearts.png", "10ofdiamonds.png", "10ofspades.png", "10ofclubs.png", "jackofhearts.png", "jackofdiamonds.png", "jackofspades.png", "jackofclubs.png", "queenofhearts.png", "queenofdiamonds.png", "queenofspades.png", "queenofclubs.png", "kingofhearts.png", "kingofdiamonds.png", "kingofspades.png", "kingofclubs.png"];
-var hand = [];
-var pairs = [];
-var handimages = [];
-var ophand = [];
-var oppairs = [];
-var ophandimages = [];
+// (function() {
 
-var cut = function() {
-	var random = Math.floor(Math.random(0, 1) * (deck.length-1));
-	var oprandom = Math.floor(Math.random(0, 1) * (deck.length-1));
-	if(deck[random] == "Jack") {
-		hand.push("11");
-	} else if(deck[random] == "Queen") {
-		hand.push("12");
-	} else if(deck[random] == "King") {
-		hand.push("13");
-	} else if (deck[random] == "Ace") {
-		hand.push("1");
-	} else {
-		hand.push(deck[random]);
-	}
-	handimages.push(deckimages[random]);
-	deckimages.splice(random, 1);
-	deck.splice(random, 1);
+	var turn = "player";
+	var deck = ["Ace", "Ace", "Ace", "Ace", "2", "2", "2", "2", "3", "3", "3", "3", "4", "4", "4", "4", "5", "5", "5", "5", "6", "6", "6", "6", "7", "7", "7", "7", "8", "8", "8", "8", "9", "9", "9", "9", "10", "10", "10", "10", "Jack", "Jack", "Jack", "Jack", "Queen", "Queen", "Queen", "Queen", "King", "King", "King", "King"];
+	var deckimages = ["aceofhearts.png", "aceofdiamonds.png", "aceofspades.png", "aceofclubs.png", "2ofhearts.png", "2ofdiamonds.png", "2ofspades.png", "2ofclubs.png", "3ofhearts.png", "3ofdiamonds.png", "3ofspades.png", "3ofclubs.png","4ofhearts.png", "4ofdiamonds.png", "4ofspades.png", "4ofclubs.png", "5ofhearts.png", "5ofdiamonds.png", "5ofspades.png", "5ofclubs.png", "6ofhearts.png", "6ofdiamonds.png", "6ofspades.png", "6ofclubs.png", "7ofhearts.png", "7ofdiamonds.png", "7ofspades.png", "7ofclubs.png", "8ofhearts.png", "8ofdiamonds.png", "8ofspades.png", "8ofclubs.png", "9ofhearts.png", "9ofdiamonds.png", "9ofspades.png", "9ofclubs.png", "10ofhearts.png", "10ofdiamonds.png", "10ofspades.png", "10ofclubs.png", "jackofhearts.png", "jackofdiamonds.png", "jackofspades.png", "jackofclubs.png", "queenofhearts.png", "queenofdiamonds.png", "queenofspades.png", "queenofclubs.png", "kingofhearts.png", "kingofdiamonds.png", "kingofspades.png", "kingofclubs.png"];
+	var hand = [];
+	var handpairs = [];
+	var handimages = [];
+	var ophand = [];
+	var ophandpairs = [];
+	var ophandimages = [];
+	var deckcount = 52;
+	var turn = 0;
+	var handcount = 5;
 
-	if(deck[oprandom] == "Jack") {
-		ophand.push("11");
-	} else if(deck[oprandom] == "Queen") {
-		ophand.push("12");
-	} else if(deck[oprandom] == "King") {
-		ophand.push("13");
-	} else if (deck[oprandom] == "Ace") {
-		ophand.push("1");
-	} else {
-		ophand.push(deck[oprandom]);
+	var handcut = function() {
+		var random = Math.floor(Math.random(0, 1) * (deck.length-1));
+		sendvaluetohand(deck[random], hand, random, "hand");
+		// sendimage(handimages, deckimages, random);
+
 	}
-	ophandimages.push(deckimages[oprandom]);
-	deckimages.splice(oprandom, 1);
-	deck.splice(oprandom, 1);
-}
-$(".start").click(function() {
-	for(var card = 0; card < 5; card++) {
-		cut();
-		$("#enemycard" + (card + 1)).css("background-image", "url(img/back.png)").css("");
-		$("#yourcard" + (card + 1)).css("background-image", "url(img/" + handimages[card] + ")");
+	var ophandcut = function() {
+		var oprandom = Math.floor(Math.random(0, 1) * (deck.length-1));
+		sendvaluetohand(deck[oprandom], ophand, oprandom, "ophand");
+		// sendimage(ophandimages, deckimages, oprandom);
 	}
-	hand.sort(function(a, b){return a-b});
-	ophand.sort(function(a, b){return a-b});
-	console.log(hand);
-	console.log(ophand);
-	console.log(deck);
-});
+
+	var sendvaluetohand = function(value, player, index, nameofplayer) {
+		if(value == "Jack") {
+			checkforapair("11", player, index, nameofplayer);
+		} else if(value == "Queen") {
+			checkforapair("12", player, index, nameofplayer);
+		} else if(value == "King") {
+			checkforapair("13", player, index, nameofplayer);
+		} else if (value == "Ace") {
+			checkforapair("1", player, index, nameofplayer);
+		} else {
+			checkforapair(value, player, index, nameofplayer);
+		}
+		deckcount = deckcount -1;
+		$(".numberofcards").html(deckcount);
+	}
+
+	var checkforapair = function(card, player, index, nameofplayer) {
+		if(jQuery.inArray(card, player) != -1)  {
+			player.splice(player.indexOf(card), 1);
+			console.log("Found a pair in " + nameofplayer + ". Redrawing...");
+			if(nameofplayer == "hand") {
+				handpairs.push(1);
+				handimages.splice(handimages.indexOf(card), 1);
+				handcut();
+			} else if(nameofplayer == "ophand") {
+				ophandpairs.push(1);
+				ophandimages.splice(ophandimages.indexOf(card), 1);
+				ophandcut();
+			}
+			deckimages.splice(index, 1);
+			deck.splice(index, 1);
+		} else {
+			console.log("No pairs in " + nameofplayer + ". Moving on...");
+			player.push(card);
+			if(nameofplayer == "hand") {
+				sendimage(handimages, deckimages, index, nameofplayer);
+				
+			} else {
+				sendimage(ophandimages, deckimages, index, nameofplayer);
+			}
+		}
+	} 
+
+	var sendimage = function(player, imagearray, value, nameofplayer) {
+		player.push(imagearray[value]);
+		imagearray.splice(value, 1);
+		deck.splice(value, 1);
+	}
+
+	$(".start").click(function() {
+		while(hand.length < 5) {
+			handcut();
+		}
+		while(ophand.length < 5) {
+			ophandcut();
+		}
+		for(var card = 0; card < 5; card++) {
+			var cardvalue;
+			$("#enemycard" + (card + 1)).css("background-image", "url(img/back.png)").css("");
+			$("#yourcard" + (card + 1)).css("background-image", "url(img/" + handimages[card] + ")");
+			if(hand[card] == "1") {
+					cardvalue = "Aces";
+				} else if(hand[card] == "11") {
+					cardvalue = "Jacks";
+				} else if(hand[card] == "12") {
+					cardvalue = "Queens";
+				} else if(hand[card] == "13") {
+					cardvalue = "Kings";
+				} else {
+					cardvalue = hand[card] + "s";
+				}
+			jQuery('<option/>', {
+				value: hand[card], 
+				html: cardvalue
+			}).appendTo("#answers");
+		}
+	});
+	var populatehandimages = function() {
+		var cardvalue;
+		for(var card = 0; card <= hand.length; card++) {
+			$("#yourcard" + (card + 1)).css("background-image", "url(img/" + handimages[card] + ")");
+			if(hand[card] == "1") {
+				cardvalue = "Aces";
+			} else if(hand[card] == "11") {
+				cardvalue = "Jacks";
+			} else if(hand[card] == "12") {
+				cardvalue = "Queens";
+			} else if(hand[card] == "13") {
+				cardvalue = "Kings";
+			} else {
+				cardvalue = hand[card] + "s";
+			}
+		}
+			jQuery('<option/>', {
+				value: hand[card], 
+				html: cardvalue
+			}).appendTo("#answers");
+			hand.sort(function(a, b){return a-b});
+	}
+	$(".dropbtn").click(function() {
+		if(turn == 0) {
+			gotany();
+		} else {
+			// Do nothing
+		}
+	});
+
+	var checkhandsize = function(handcount, row) {
+		var handsize = hand.length;
+		while(handsize != handcount) {
+			console.log("handcount is " + handcount + " and hand size is " + handsize + ". Removing an element...");
+			$(".yourcard" + handcount).remove()
+			handcount--;
+			console.log("Now handcount is " + handcount);
+		}
+		console.log("Done!");
+		if(hand.length >= 5) {
+			$(".yourextra" + row).append("<div class='col-lg-2'><div class='card' id='yourcard'" + handcount + "'></div></div>");
+		}
+
+	}
+
+	var gotany = function() {
+		console.log(turn);
+		var randomdraw = Math.floor(Math.random(0, 1) * (deck.length-1));
+		var cardiwant = $("#answers").val();
+		console.log(cardiwant);
+			if(jQuery.inArray(cardiwant, ophand) != -1) {
+				$(".dialogue").html("Yes");
+			} else {
+				$(".dialogue").html("Go Fish");
+				// deckcount = deckcount-1;
+				// $(".numberofcards").html(deckcount);
+
+				sendvaluetohand(deck[randomdraw], hand, randomdraw, "hand");
+				console.log("Hand Count is " + handcount + "!");
+				handcount++;
+
+				if(handcount <= 10) {
+					checkhandsize(handcount, 2);
+					// $(".yourextra2").append("<div class='col-lg-2'><div class='card' id='yourcard" + handcount + "'></div></div>");
+				} else if(handcount > 10 && handcount <= 15) {
+					checkhandsize(handcount, 3);
+					// $(".yourextra3").append("<div class='col-lg-2'><div class='card'></div></div>");
+				} else if(handcount > 15 && handcount <= 20) {
+					checkhandsize(handcount, 4);
+					// $(".yourextra4").append("<div class='col-lg-2'><div class='card'></div></div>");
+				} else if(handcount > 20 && handcount <= 25) {
+					checkhandsize(handcount, 5)
+					// $(".yourextra5").append("<div class='col-lg-2'><div class='card'></div></div>");
+				} else if(handcount > 25 && handcount <= 30) {
+					checkhandsize(handcount, 6);
+					// $(".yourextra6").append("<div class='col-lg-2'><div class='card'></div></div>");
+				} 
+				// checkhandsize(handcount);
+				populatehandimages();
+				// hand.push(deck[randomdraw]);
+				// deckcount = deckcount-1;
+				// $(".numberofcards").html(deckcount);
+				// handimages.push(deckimages[randomdraw]);
+				// deckimages.splice(randomdraw, 1);
+				// deck.splice(randomdraw, 1);
+
+			}
+			turn = turn + 1;
+		var myturn = setInterval(function() {
+			enemyturn();
+			clearInterval(myturn);
+		}, 2000);
+	}
+	var enemyturn = function() {
+		console.log(turn);
+		var randomcard = Math.floor(Math.random(0,1)*ophand.length);
+		var cardyouwant = ophand[randomcard];
+		if(jQuery.inArray(cardyouwant, hand) != -1) {
+			if(cardyouwant == "1") {
+				$(".dialogue").html("Your opponent asks, 'Got any Aces?' You give your Ace");
+			} else if(cardyouwant == "11") {
+				$(".dialogue").html("Your opponent asks, 'Got any Jacks?' You give you Jack");
+			} else if(cardyouwant == "12") {
+				$(".dialogue").html("Your opponent asks, 'Got any Queens?' You give your Queen");
+			} else if(cardyouwant == "13") {
+				$(".dialogue").html("Your opponent asks, 'Got any Kings?' You give your King");
+			} else {
+				$(".dialogue").html("Your opponent asks, 'Got any " + cardyouwant + "'s?' You give your " + cardyouwant);
+			}
+		} else {
+			if(cardyouwant == "1") {
+				$(".dialogue").html("Your opponent asks, 'Got any Aces?' You don't. They draw a card");
+			} else if(cardyouwant == "11") {
+				$(".dialogue").html("Your opponent asks, 'Got any Jacks?' You don't. They draw a card");
+			} else if(cardyouwant == "12") {
+				$(".dialogue").html("Your opponent asks, 'Got any Queens?' You don't. They draw a card");
+			} else if(cardyouwant == "13") {
+				$(".dialogue").html("Your opponent asks, 'Got any Kings?' You don't. They draw a card");
+			} else {
+				$(".dialogue").html("Your opponent asks, 'Got any " + cardyouwant + "'s?' You don't. They draw a card");
+			}
+			sendvaluetohand(deck[randomcard], ophand, randomcard, "ophand");
+			$(".numberofcards").html(deckcount);
+			ophandimages.push(deckimages[randomcard]);
+			deckimages.splice(randomcard, 1);
+			deck.splice(randomcard, 1);
+		}
+		turn = 0;
+	}
+
+	var checkthedeck = function() {
+		if(deckcount > 0) {
+			// Keep playing
+		} else {
+			countthepairs();
+		}
+	}
+	var countthepairs = function() {
+		// Count the number of items in the "pairs" and "oppairs" arrays. Whichever array has the most pairs wins
+	}
+// }());
 </script>
 </body>
 </html>
